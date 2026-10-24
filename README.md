@@ -15,14 +15,27 @@ based on the original [ansible kria](https://monome.org/docs/ansible/kria/) by m
 
 - 4 tracks, 16 steps, parameter pages: trigger, note, octave, duration, ratchet, alt note, velocity.
 - trigger ratcheting - up to 5 individually toggled sub-triggers per step
-- alternate note - second note sequence with its own loop and clock division
-- per-track loop with wrap-around, 5 direction modes, clock division
+- alternate note - second note sequence
+- per-parameter loops and clock divisions - every page (trigger, note, octave, note length, ratchet, alt note) has its own loop and clock division for each track, with loop sync / division sync / note division sync modes like ansible kria
+- per-track direction with wrap-around loops, 5 direction modes
 - per-step probability and note quantization mode
 - 16 scale presets with editable intervals, live adjust
 - 16 pattern slots with flash persistence and quantized cueing
 - internal tempo control (30-300bpm) and external MIDI clock input
 - configurable MIDI channel per track, MIDI clock output
-- consider this a kria lite version. missing features are glide page, meta-patterns, per-parameter clock divisions, division cueing, division sync modes
+- consider this a kria lite version. missing features are glide page, meta-patterns, division cueing
+
+## what's new in v1.7.0
+
+* **per-parameter loops and clock divisions** - like ansible kria, each parameter page has its own loop and clock division for every track, so e.g. octave can loop 3 steps at 1x while notes loop 8 steps at 2x. hold loop mod or time division mod on a page to set that page's parameter. the velocity page uses the note loop/division and probability uses the trigger loop/division
+* **loop sync** (config page) - none / track / all, as in ansible kria. default = all, so loops edited on one page apply everywhere until you unlink them
+* **division sync** (config page, step 8 row 3 = track, steps 7-10 row 6 = all) - none / track / all. default = none
+* **note division sync** (config page, step 8 row 4) - links trigger with note, and octave / note length / ratchet / alt note with each other
+* **alt note now has a truly independent clock** - previously its division only ticked on trigger steps, so it effectively multiplied the trigger division. all parameters now run on their own clock (the trigger decides when notes fire; the other parameters are read at that moment)
+* **note quantization** (scale page, step 2) - the note, octave and note length playheads advance only when a note fires, and now follow the track's direction mode
+* **saved patterns** - patterns are 66 bytes larger; patterns saved by older versions load fine (new parameters inherit the trigger loop and division), but patterns saved by this version still load in older versions, but without the per-parameter loops and divisions
+* removed the special alt-note-only loop gesture (loop mod now works the same on every page)
+* with random/drunk direction each parameter now moves independently, as in ansible kria
 
 ## what's new in v1.6.3
 
@@ -80,4 +93,4 @@ llm disclosure
 
 ## version
 
-v1.6.3
+v1.7.0

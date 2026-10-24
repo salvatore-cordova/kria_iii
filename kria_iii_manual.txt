@@ -1,5 +1,5 @@
 kria iii
-monome grid one - 4-track midi step sequencer - v1.6.2
+monome grid one - 4-track midi step sequencer - v1.7.0
 based on ansible kria by monome. consider this a kria lite version, with some expanded and added features
 
 ════════════════════════════════════════════════════════════════
@@ -47,7 +47,7 @@ step 7
   row 1 = degree 7 (highest)
 
 › note quantization:
-  (scale page, step 2 in track row): when enabled per track, the pitch playhead advances on each trigger fire rather than each clock step.
+  (scale page, step 2 in track row): when enabled per track, the note, octave and note length playheads advance on each trigger fire rather than each clock step.
 
 ════════════════════════════════════════════════════════════════
 
@@ -111,9 +111,7 @@ step 7, second press
 a parallel 16-step sequence with its own loop and clock division. each step holds a scale degree offset (0-6) added to the main note when a trigger fires. the combined index wraps within the scale.
 
 › rows 1-7: set degree offset for that step. row 7 = unison (no change).
-› the alt note loop is shown and edited in the loop mod when on this page.
-  with loop sync and note sync both off, holding loop mod stays on the alt note page -
-  press any two steps across rows 1-7 to set the loop brace directly.
+› the alt note loop and clock division are set with loop mod and time division mod while on this page.
 
 ════════════════════════════════════════════════════════════════
 
@@ -122,10 +120,8 @@ step 11, hold
 
 › setting a loop: first press = loop start, second press = loop end.
   loops can wrap around step 16 to step 3 for example.
-› on alt note page: shows and edits the alt-note loop. all other pages (including note page): shows the trigger loop.
-› on alt note page with loop sync and note sync both off: stays on the alt note page -
-  press any two steps across rows 1-7 to set the alt note loop brace in place.
-  a brief flash confirms the new brace.
+› every page has its own loop for each track: trigger, note, octave, note length, ratchet and alt note. for example octave can loop 3 steps while notes loop 8. holding loop mod shows the loop of the page you are on. the velocity page uses the note loop and probability uses the trigger loop.
+› how many parameters one loop edit changes depends on loop sync (config page): none = only the parameter on the current page, track = every parameter of the edited track, all = every parameter on every track (default).
 › any track's loop can be edited, not just the active track.
 › mute: while holding loop mod, press a track button to toggle mute.
 
@@ -139,7 +135,8 @@ rows 1-4: division per track · active track = full brightness
   step  1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16
   div   1x  2x  3x  4x  5x  6x  7x  8x  10x 12x 14x 16x 20x 24x 28x 32x
 
-› on the alt note page, the active track's division sets the alt-note clock independently from the trigger division.
+› every page has its own clock division for each track, so octave can run at a different speed than notes. holding time division mod shows and sets the division of the page you are on. the velocity page uses the note division and probability uses the trigger division.
+› how many parameters one division edit changes depends on division sync and note division sync (config page). default = none, so each page keeps its own division.
 
 ════════════════════════════════════════════════════════════════
 
@@ -164,7 +161,7 @@ step 15
 
 - per-track settings: rows 1-4
 › select midi channel: tap step 1 to open channel select for that track - all 16 steps show channels 1-16. tap a channel to assign and close.
-› note quantization: toggle step 2 - pitch advances on trigger fires instead of clock steps.
+› note quantization: toggle step 2 - note, octave and note length advance on trigger fires instead of clock steps.
 › direction: steps 4-8 = forward · reverse · pingpong · random walk · random.
 
 - scale interval editor: rows 1-6, steps 9-16
@@ -223,15 +220,23 @@ step 7, row 7
 
 › note sync (square icon): on = pressing a step on the note, octave, note length, or velocity pages sets/removes both the parameter and the trigger together. off = parameters and triggers are independent.
 
-› loop sync - track (step 12, row 3): sets loop brace on one track at a time.
+› loop sync - track (step 12, row 3): a loop edit applies to every parameter of the edited track, other tracks keep their own loops.
 
-› loop snap (step 14, row 3): when on, setting a new loop arms a pending snap instead of applying immediately. the snap fires when any running track whose loop length is at least as long as the new loop completes a cycle. pending snap endpoints blink in the loop mod view. turning on loop snap disables loop sync all. default = off.
+› loop snap (step 14, row 3): when on, setting a new loop arms a pending snap instead of applying immediately. the snap fires when any running track whose loop length is at least as long as the new loop completes a cycle. pending snap endpoints blink in the loop mod view. the pending snap applies to the parameter whose page you set it on. turning on loop snap disables loop sync all. default = off.
 
-› loop sync - all (steps 11-14, row 6): all four tracks share loop points. turning on loop sync all disables loop snap. default = on.
+› loop sync - all (steps 11-14, row 6): a loop edit applies to every parameter on all four tracks. turning on loop sync all disables loop snap. default = on.
+
+  with neither loop sync button lit (none), a loop edit changes only the parameter on the current page, on the track you edit.
+
+› division sync - track (step 8, row 3): a division edit applies to every parameter of the edited track.
+
+› division sync - all (steps 7-10, row 6): a division edit applies to every parameter on all four tracks.
+
+  with neither division sync button lit (none), a division edit changes only the parameter on the current page, on the track you edit. default = none.
+
+› note division sync (step 8, row 4): links trigger with note, and links octave, note length, ratchet and alt note with each other. works on its own (none) or together with division sync track / all. default = off.
 
 › note tie (step 9, row 8): when on, sends note-on before note-off on consecutive steps, enabling legato on connected instruments. default = off.
-
-note: kria_iii syncs only two loop layers per track (trigger and alt note). the original kria supports independent loops per parameter.
 
 ════════════════════════════════════════════════════════════════
 
@@ -270,6 +275,8 @@ DEFAULTS
   note sync          on
   loop snap          off
   loop sync          all
+  division sync      none
+  note division sync off
   note tie           off
 
 ════════════════════════════════════════════════════════════════
@@ -278,11 +285,9 @@ MISSING FROM ANSIBLE KRIA
 
   glide page
   meta-patterns
-  per-parameter clock divisions
   division cueing
-  division sync modes
 
 
 
 
-kria iii - v1.6.2
+kria iii - v1.7.0

@@ -192,10 +192,10 @@ window.addEventListener('DOMContentLoaded',function(){
   // config page
   G('g-cfg',
     [[E,E,E,E,E,E,E,E,E,E,E,E,E,E,E,E],[E,E,E,E,E,E,E,E,E,E,E,E,E,E,E,E],
-     [E,H,H,H,H,E,E,E,E,E,E,B,E,D,E,E],
+     [E,H,H,H,H,E,E,D,E,E,E,B,E,D,E,E],
+     [E,H,E,E,H,E,E,D,E,E,E,E,E,E,E,E],
      [E,H,E,E,H,E,E,E,E,E,E,E,E,E,E,E],
-     [E,H,E,E,H,E,E,E,E,E,E,E,E,E,E,E],
-     [E,H,H,H,H,E,E,E,E,E,B,B,B,B,E,E],
+     [E,H,H,H,H,E,D,D,D,D,B,B,B,B,E,E],
      [E,E,E,E,E,E,D,E,E,E,E,E,E,E,E,E],[E,E,E,E,E,E,E,E,D,E,E,E,E,E,E,E]],
     null);
 });
@@ -204,7 +204,7 @@ window.addEventListener('DOMContentLoaded',function(){
 <body>
 <div class="container">
 <h1>kria iii</h1>
-<p class="subtitle"><span class="k">monome grid one - 4-track midi step sequencer - v1.6.2</span><br>based on ansible kria by monome.
+<p class="subtitle"><span class="k">monome grid one - 4-track midi step sequencer - v1.7.0</span><br>based on ansible kria by monome.
 <tr><td> consider this a kria lite version, with some expanded and added features</td></tr></p>
 
 
@@ -259,7 +259,7 @@ window.addEventListener('DOMContentLoaded',function(){
 <div id="g-note"></div>
 <ul class="fl">
   <li><span class="k">press a step:</span> sets note for that step. 7 rows = 7 scale degrees. row 7 = degree 1 (root). row 1 = degree 7 (highest).</li>
-  <li><span class="k">note quantization:</span> (scale page, step 2 in track row): when enabled per track, the pitch playhead advances on each trigger fire rather than each clock step.</li>
+  <li><span class="k">note quantization:</span> (scale page, step 2 in track row): when enabled per track, the note, octave and note length playheads advance on each trigger fire rather than each clock step.</li>
 </ul>
 </div>
 
@@ -336,7 +336,7 @@ window.addEventListener('DOMContentLoaded',function(){
 <div class="gn"></div>
 <ul class="fl">
   <li><span class="k">rows 1-7:</span> set degree offset for that step. row 7 = unison (no change).</li>
-  <li>the alt note loop is shown and edited in the loop mod when on this page. with loop sync and note sync both off, holding loop mod stays on the alt note page - press any two steps across rows 1-7 to set the loop brace directly.</li>
+  <li>the alt note loop and clock division are set with loop mod and time division mod while on this page.</li>
 </ul>
 </div>
 
@@ -348,8 +348,8 @@ window.addEventListener('DOMContentLoaded',function(){
 <div class="gn"></div>
 <ul class="fl">
   <li><span class="k">setting a loop:</span> first press = loop start, second press = loop end. loops can wrap around step 16 to step 3 for example.</li>
-  <li>on <span class="k">alt note page:</span> shows and edits the alt-note loop. all other pages (including note page): shows the trigger loop.</li>
-  <li>on <span class="k">alt note page</span> with loop sync and note sync both off: stays on the alt note page - press any two steps across rows 1-7 to set the alt note loop brace in place. a brief flash confirms the new brace.</li>
+  <li><span class="k">every page has its own loop</span> for each track: trigger, note, octave, note length, ratchet and alt note. for example octave can loop 3 steps while notes loop 8. holding loop mod shows the loop of the page you are on. the velocity page uses the note loop and probability uses the trigger loop.</li>
+  <li>how many parameters one loop edit changes depends on <span class="k">loop sync</span> (config page): none = only the parameter on the current page, track = every parameter of the edited track, all = every parameter on every track (default).</li>
   <li>any track's loop can be edited, not just the active track.</li>
   <li><span class="k">mute:</span> while holding loop mod, press a track button to toggle mute.</li>
 </ul>
@@ -366,7 +366,8 @@ window.addEventListener('DOMContentLoaded',function(){
 <tr><td><span class="k">div</span></td><td class="k">1x</td><td>2x</td><td>3x</td><td>4x</td><td>5x</td><td>6x</td><td>7x</td><td>8x</td><td>10x</td><td>12x</td><td>14x</td><td>16x</td><td>20x</td><td>24x</td><td>28x</td><td>32x</td></tr>
 </table>
 <ul class="fl">
-  <li>on the <span class="k">alt note page</span>, the active track's division sets the alt-note clock independently from the trigger division.</li>
+  <li><span class="k">every page has its own clock division</span> for each track, so octave can run at a different speed than notes. holding time division mod shows and sets the division of the page you are on. the velocity page uses the note division and probability uses the trigger division.</li>
+  <li>how many parameters one division edit changes depends on <span class="k">division sync</span> and <span class="k">note division sync</span> (config page). default = none, so each page keeps its own division.</li>
 </ul>
 </div>
 
@@ -399,7 +400,7 @@ window.addEventListener('DOMContentLoaded',function(){
 <p class="desc" style="margin-top:12px"><span class="k">- per-track settings (rows 1-4)</span></p>
 <ul class="fl">
   <li><span class="k">select midi channel:</span> tap step 1 to open channel select for that track - all 16 steps show channels 1-16. tap a channel to assign and close.</li>
-  <li><span class="k">note quantization:</span> toggle step 2 - pitch advances on trigger fires instead of clock steps.</li>
+  <li><span class="k">note quantization:</span> toggle step 2 - note, octave and note length advance on trigger fires instead of clock steps.</li>
   <li><span class="k">direction:</span> steps 4-8 = forward · reverse · pingpong · random walk · random.</li>
 </ul>
 <br>
@@ -478,12 +479,14 @@ window.addEventListener('DOMContentLoaded',function(){
 <div id="g-cfg"></div>
 <ul class="fl">
   <li><span class="k">note sync (square icon):</span> on = pressing a step on the note, octave, note length, or velocity pages sets/removes both the parameter and the trigger together. off = parameters and triggers are independent.</li>
-  <li><span class="k">loop sync - track (step 12, row 3):</span> sets loop brace on one track at a time.</li>
-  <li><span class="k">loop snap (step 14, row 3):</span> when on, setting a loop brace arms a pending snap instead of applying immediately. the snap fires when a running track completes a cycle whose loop is at least as long as the new loop - longer snaps wait for a bigger boundary. to set a multi-step snap: hold the first step and press the second. to set a 1-step snap: tap a single step (press and release). pending snap endpoints blink in the loop mod view. turning on loop snap disables loop sync all. default = off.</li>
-  <li><span class="k">loop sync - all (steps 11-14, row 6):</span> all four tracks share loop points. turning on loop sync all disables loop snap. default = on.</li>
+  <li><span class="k">loop sync - track (step 12, row 3):</span> a loop edit applies to every parameter of the edited track, other tracks keep their own loops.</li>
+  <li><span class="k">loop snap (step 14, row 3):</span> when on, setting a loop brace arms a pending snap instead of applying immediately. the snap fires when a running track completes a cycle whose loop is at least as long as the new loop - longer snaps wait for a bigger boundary. to set a multi-step snap: hold the first step and press the second. to set a 1-step snap: tap a single step (press and release). pending snap endpoints blink in the loop mod view. the pending snap applies to the parameter whose page you set it on. turning on loop snap disables loop sync all. default = off.</li>
+  <li><span class="k">loop sync - all (steps 11-14, row 6):</span> a loop edit applies to every parameter on all four tracks. turning on loop sync all disables loop snap. default = on. with neither loop sync button lit (none), a loop edit changes only the parameter on the current page, on the track you edit.</li>
+  <li><span class="k">division sync - track (step 8, row 3):</span> a division edit applies to every parameter of the edited track.</li>
+  <li><span class="k">division sync - all (steps 7-10, row 6):</span> a division edit applies to every parameter on all four tracks. with neither division sync button lit (none), a division edit changes only the parameter on the current page, on the track you edit. default = none.</li>
+  <li><span class="k">note division sync (step 8, row 4):</span> links trigger with note, and links octave, note length, ratchet and alt note with each other. works on its own (none) or together with division sync track / all. default = off.</li>
   <li><span class="k">note tie (step 9, row 8):</span> when on, sends note-on before note-off on consecutive steps, enabling legato on connected instruments. default = off.</li>
 </ul>
-<p class="desc" style="margin-top:12px">note: kria_iii syncs only two loop layers per track (trigger and alt note). the original kria supports independent loops per parameter.</p>
 </div>
 
 <!-- ─── GESTURES ──────────────────────────────────────── -->
@@ -521,6 +524,8 @@ window.addEventListener('DOMContentLoaded',function(){
 <tr><td>note sync</td><td>on</td></tr>
 <tr><td>loop snap</td><td>off</td></tr>
 <tr><td>loop sync</td><td>all</td></tr>
+<tr><td>division sync</td><td>none</td></tr>
+<tr><td>note division sync</td><td>off</td></tr>
 <tr><td>note tie</td><td>off</td></tr>
 </table>
 </div>
@@ -533,9 +538,7 @@ window.addEventListener('DOMContentLoaded',function(){
 <table class="dt">
 <tr><td>glide page</td></tr>
 <tr><td>meta-patterns</td></tr>
-<tr><td>per-parameter clock divisions</td></tr>
 <tr><td>division cueing</td></tr>
-<tr><td>division sync modes </td></tr>
 </table>
 </div>
 <br>
@@ -545,7 +548,7 @@ window.addEventListener('DOMContentLoaded',function(){
 <br>
 
 
-<p class="footer"><span class="k">kria iii - v1.6.2</span></p>
+<p class="footer"><span class="k">kria iii - v1.7.0</span></p>
 </div>
 </body>
 </html>
