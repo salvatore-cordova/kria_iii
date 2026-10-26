@@ -10,14 +10,14 @@ function gSDR(s) local t={} for i=1,7 do local c=SDF:byte((s-1)*7+i) t[i]=c and 
 SD={} for i=1,7 do SD[i]=gSDR(i) end
 local _c=gSDR(8) for i=8,16 do SD[i]=_c end
 F=0 D=5 M=9 H=13 BF=15
-ODR=5
+ODR=7
 NP=16
 DM={16,14,12,10,8,4,2,1,.75,.625,.5,.375,.25,.187,.125,.0625}
 VL="\20\40\60\80\95\112\127"
 PP="00001000101011101111"
 WK="\0\2\4\5\7\9\11"
 SH="\0\1\4\7\10\13\16\21\24" MKS="\1\7\7\7\7\7\31\7\7"
-STD=1<<1|5<<4|5<<7|5<<10|1<<13|1<<16|6<<24
+STD=1<<1|7<<4|5<<7|5<<10|1<<13|1<<16|6<<24
 MTC=1|7<<13|31<<16 VTC=1<<13|1<<16
 st={}
 function gf(f,t,s) return (st[t*16+s-16]>>SH:byte(f))&MKS:byte(f) end
@@ -100,7 +100,7 @@ function mnf(t)
 local ni=gf(2,t,ph[t+4]) or 1
 ni=((ni-1)+(gf(8,t,ph[t+20]) or 0))%7+1
 local adj=sadj[((ni-1)%7)+1] or 0
-return clamp((cs[ni] or sr)+adj+(5-(gf(3,t,ph[t+8]) or 5))*12+((go2[t] or 3)-3)*12,0,127)
+return clamp((cs[ni] or sr)+adj+(7-gf(3,t,ph[t+8])+go2[t]-1)*12,0,127)
 end
 function son(t)
 if mute[t] then return end
@@ -281,7 +281,7 @@ local g=544
 sr=B(d,g+1) asd=B(d,g+2)
 for i=1,7 do si[i]=B(d,g+2+i) end SD[asd]={tu(si)}
 local q=g+9
-for t=1,4 do go2[t]=clamp(B(d,q+t),1,8) gdu[t]=clamp(B(d,q+4+t),1,16) sdir[t]=clamp(B(d,q+8+t),1,5) mute[t]=B(d,q+12+t)==1 end
+for t=1,4 do go2[t]=clamp(B(d,q+t),1,6) gdu[t]=clamp(B(d,q+4+t),1,16) sdir[t]=clamp(B(d,q+8+t),1,5) mute[t]=B(d,q+12+t)==1 end
 if #d>=633 then for t=1,4 do for s=1,STEPS do sf(9,t,s,clamp(B(d,570+(t-1)*16+(s-1)) or 6,1,7)) end end end
 if #d>=637 then for t=1,4 do tclk[t]=B(d,633+t)==1 end end
 if #d>=639 then nsyn=B(d,638)==1 lsyn=B(d,639) end
@@ -391,26 +391,14 @@ function dano() dcm(8,6,2) end
 function dve() dcm(9,2,3) end
 function dno() dcm(2,2,1) end
 function doc()
-for x=1,16 do gl(x,1,F) end
-for c=1,8 do gl(c,1,(c==go2[at]) and BF or D) end
+for c=1,6 do gl(c,1,(c==go2[at]) and BF or D) end
 for s=1,STEPS do
 local sel=gf(3,at,s) local iph=(tr2 and s==ph[at+8]) local itr=gf(1,at,s)==1
 for r=2,7 do
-local b local inf
-if sel<5 then inf=(r>=sel and r<=5)
-elseif sel>5 then inf=(r>=5 and r<=sel)
-else inf=(r==5) end
-if r==sel then
-if iph then b=BF elseif itr then b=H else b=F end
-elseif inf then
-if iph then b=M elseif itr then b=D else b=F end
-else
-if r==5 then
-if sel==5 then
-if iph then b=BF elseif itr then b=H else b=1 end
-else b=iph and D or 1 end
+local b
+if r==sel then b=iph and BF or itr and H or r==7 and 1 or F
+elseif r>sel then b=iph and M or itr and D or r==7 and 1 or F
 else b=iph and D or F end
-end
 gl(s,r,b)
 end
 end
@@ -917,7 +905,7 @@ nst(2,x,(7-y)+1)
 rd()
 end
 elseif vm==3 then
-if y==1 and x>=1 and x<=8 then go2[at]=x rd()
+if y==1 and x>=1 and x<=6 then go2[at]=x rd()
 elseif y>=2 and y<=7 and x>=1 and x<=STEPS then
 nst(3,x,y)
 rd() end
@@ -1008,7 +996,7 @@ vm=1 at=1
 nsyn=true lsyn=2 tsyn=0 ndsy=false tie=false
 mlh=false mth=false mph=false cfh=false tmh=false lfc=nil lft=nil
 ph={} ls={} le={} dv2={} dc={} ddr={} an={}
-go2={3,3,3,3} gdu={9,9,9,9} sdir={1,1,1,1}
+go2={1,1,1,1} gdu={9,9,9,9} sdir={1,1,1,1}
 mute={false,false,false,false}
 tclk={false,false,false,false}
 PM="\1\2\3\4\1\1\1\1\1\1\5\6\2"
@@ -1064,14 +1052,14 @@ elseif clrt then
 local t=clrt
 if vm==1 or vm==11 then
 clm(-1,STD,t)
-go2[t]=3 gdu[t]=9
+go2[t]=1 gdu[t]=9
 sdir[t]=1 tclk[t]=false
 sof(t) ram[t]:stop() rsc[t]=0 lc[t]=0
 for k=t,t+20,4 do ls[k]=1 le[k]=6 dv2[k]=1 ph[k]=1 dc[k]=0 ddr[k]=1 end
 elseif vm==2 or vm==12 then
 clm(15,1<<1,t)
 elseif vm==3 then
-clm(7<<4,5<<4,t) go2[t]=3
+clm(7<<4,7<<4,t) go2[t]=1
 elseif vm==4 then
 clm(7<<7,5<<7,t) gdu[t]=9
 elseif vm==13 then

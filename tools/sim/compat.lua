@@ -16,7 +16,8 @@ nav(7)
 for t=1,4 do sel(t) for s=1,16 do tap(s,((s*t)%7)+1) end end
 note("oct")
 nav(8)
-for t=1,4 do sel(t) for s=1,16 do tap(s,2+((s+t)%6)) end tap(t+2,1) end
+-- v1.7 octaves are additive from row 7 / column 1; use offsets 0..3 that both versions can express
+for t=1,4 do sel(t) for s=1,16 do local R=2+((s+t)%4) tap(s,NEW and R+2 or R) end tap(NEW and t or t+2,1) end
 note("dur")
 nav(9)
 for t=1,4 do sel(t) for s=1,16 do tap(s,2+((s*2+t)%6)) end end

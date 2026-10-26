@@ -36,6 +36,9 @@ based on the original [ansible kria](https://monome.org/docs/ansible/kria/) by m
 * **saved patterns** - patterns are 66 bytes larger; patterns saved by older versions load fine (new parameters inherit the trigger loop and division), but patterns saved by this version still load in older versions, but without the per-parameter loops and divisions
 * removed the special alt-note-only loop gesture (loop mod now works the same on every page)
 * with random/drunk direction each parameter now moves independently, as in ansible kria
+* **octave page is additive like ansible kria** - per-step octave starts at row 7 (+0) and goes up to row 2 (+5); row 1 steps 1-6 shift the whole track up 0-5 octaves. the lowest octave is the scale root. patterns saved with older versions will play their octaves higher
+* **loop mod on parameter pages** - holding loop mod on the note, octave, note length, ratchet, alt note or velocity page keeps that page on screen and sets its loop for the selected track (press two steps in any row)
+* **track select under time division / probability mod** - hold the mod and press a track button
 
 ## what's new in v1.6.3
 

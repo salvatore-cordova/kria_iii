@@ -18,4 +18,15 @@ gp(2) tap(1,8)
 press(12,8) tap(3,8) check(at==3,"time div mod + track 3 selects track 3") rel(12,8)
 press(13,8) tap(4,8) check(at==4,"probability mod + track 4 selects track 4") rel(13,8)
 check(not mute[3] and not mute[4],"no mutes toggled")
+-- octave page is additive: rows 7..2 = +0..+5 octaves, row 1 columns 1-6 = track shift +0..+5
+gp(3) tap(1,8)
+check(ledat(1,1)==15 and ledat(7,1)==0,"octave shift starts at column 1, columns 7-16 unused")
+for k=9,9 do ph[k]=1 end
+local base=mnf(1)
+tap(1,3)
+local lit=true for r=3,7 do if ledat(1,r)==0 then lit=false end end
+check(lit and ledat(1,2)==0,"step 1 at row 3: rows 3-7 lit, row 2 dark")
+check(mnf(1)==base+48,"row 3 = +4 octaves ("..base.." -> "..mnf(1)..")")
+tap(2,1) check(mnf(1)==base+60,"row 1 column 2 shifts the track up one more octave")
+tap(1,1) tap(1,7) tap(1,7) check(mnf(1)==base,"back to row 7 / column 1 = lowest")
 io.write(fails==0 and "ALL PASS\n" or ("FAILS: "..fails.."\n"))
