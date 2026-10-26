@@ -122,7 +122,7 @@ step 11, hold
   loops can wrap around step 16 to step 3 for example.
 › every page has its own loop for each track: trigger, note, octave, note length, ratchet and alt note. for example octave can loop 3 steps while notes loop 8. holding loop mod shows the loop of the page you are on. the velocity page uses the note loop and probability uses the trigger loop.
 › how many parameters one loop edit changes depends on loop sync (config page): none = only the parameter on the current page, track = every parameter of the edited track, all = every parameter on every track (default).
-› any track's loop can be edited, not just the active track.
+› on the trigger page, rows 1-4 are the four tracks, so any track's loop can be edited. on the other pages (note, octave, note length, ratchet, alt note, velocity) the page stays on screen and you set the loop of the selected track by pressing two steps in any row 1-7; steps outside the loop are dimmed.
 › mute: while holding loop mod, press a track button to toggle mute.
 
 ════════════════════════════════════════════════════════════════
@@ -137,6 +137,7 @@ rows 1-4: division per track · active track = full brightness
 
 › every page has its own clock division for each track, so octave can run at a different speed than notes. holding time division mod shows and sets the division of the page you are on. the velocity page uses the note division and probability uses the trigger division.
 › how many parameters one division edit changes depends on division sync and note division sync (config page). default = none, so each page keeps its own division.
+› while holding time division mod (or probability mod), press a track button to select that track.
 
 ════════════════════════════════════════════════════════════════
 

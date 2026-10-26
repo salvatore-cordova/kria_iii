@@ -16,7 +16,7 @@ if diff -q "$T/base.txt" "$T/new.txt" >/dev/null; then echo "PASS compat: MIDI i
 else echo "FAIL compat: MIDI differs from v1.6.3"; diff "$T/base.txt" "$T/new.txt" | head; fi
 
 # 2. feature tests
-for t in sync playback persist; do
+for t in sync playback persist ui; do
   printf "%s: " "$t"
   lua5.4 harness.lua "$K" "$t.lua" | grep -E '^(ALL PASS|FAILS|FAIL )' | tr '\n' ' '
   echo

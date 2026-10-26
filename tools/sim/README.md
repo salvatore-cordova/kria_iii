@@ -12,3 +12,4 @@ Run everything: `tools/sim/run.sh` (needs `lua5.4`).
 - `common.lua` - shared test helpers.
 - `fuzz.lua` - random key mashing, transport and MIDI clock (`N=`, `SEED=` env vars); any Lua error fails.
 - `mem.lua` - desktop heap figures in KB (after load, garbage made while playing / saving / loading), printed for v1.6.3 and the current script.
+- `ui.lua` - loop mod on parameter pages (current track, any row) and track select while holding time division / probability mod.

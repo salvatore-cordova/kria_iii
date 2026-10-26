@@ -9,7 +9,7 @@ function gp(n)  -- go to page n through the nav keys
  end
  assert(vm==n,"gp "..n.." got "..tostring(vm))
 end
-function loop(a,b,y) press(11,8) press(a,y) press(b,y) rel(b,y) rel(a,y) rel(11,8) end
+function loop(a,b,y) if lpg() then tap(y,8) y=2 end press(11,8) press(a,y) press(b,y) rel(b,y) rel(a,y) rel(11,8) end
 function tdiv(d,y) press(12,8) tap(d,y) rel(12,8) end
 P={trig=0,note=4,oct=8,dur=12,rpt=16,alt=20}
 function same(name,t,a,b,d) local k=P[name]+t return ls[k]==a and le[k]==b and (d==nil or dv2[k]==d) end

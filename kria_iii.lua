@@ -55,6 +55,8 @@ local frac=r==0 and 0.1 or r/5
 return mx(cpd*DV:byte(dv2[t] or 1)*frac*m,.02)
 end
 function liw(k) return ls[k]>le[k] end
+function lpg() return vm>=2 and vm<=4 or vm>=11 end
+function glo(x,y,b) if y<8 then if not inl(lpk,x) then if b>2 then b=2 end elseif b<1 then b=1 end if lft and x==lfc then b=BF end end grid_led(x,y,b) end
 function inl(k,s)
 if liw(k) then return s>=ls[k] or s<=le[k] else return s>=ls[k] and s<=le[k] end
 end
@@ -611,7 +613,9 @@ if cfh then dcfg()
 elseif tmh then dtim()
 else
 dnav()
-if mlh then dlp()
+local f=mlh and lpg()
+if f then lpk=PM:byte(vm)*4-4+at gl=glo end
+if mlh and not f then dlp()
 elseif mth then dtm()
 elseif mph then dprb()
 elseif vm==11 then drch()
@@ -624,7 +628,8 @@ elseif vm==4 then ddu()
 elseif vm==6 then dsc()
 elseif vm==7 then dpat()
 end
-if mlh or mth or mph then dft() end
+gl=grid_led
+if (mlh and not f) or mth or mph then dft() end
 end
 gr()
 end
@@ -687,7 +692,7 @@ mute[x]=not mute[x]
 if mute[x] then sof(x) end
 rd() return
 end
-if (mth or mph) and x>=1 and x<=4 then rd() return end
+if (mth or mph) and x>=1 and x<=4 then at=x rd() return end
 if x>=1 and x<=4 then
 if cpt and cpt~=x then
 if vm==1 then cpm(1,x,cpt)
@@ -721,15 +726,16 @@ if cfh then tie=not tie else blk=false vm=4 end
 end
 rd() return
 end
-if (mlh or mth or mph) and y==7 then
+if (mlh and not lpg() or mth or mph) and y==7 then
 if x==7 then if z==1 then cfh=not cfh if cfh then tmh=false thk=nil shm:stop() end end rd() return end
 if x==6 then if z==1 then tmh=not tmh if tmh then cfh=false else thk=nil shm:stop() end end rd() return end
 if x==15 and z==1 then pts() return end
 if x==16 and z==1 then rts() return end
 end
 if mlh then
-if y>=1 and y<=4 and x>=1 and x<=STEPS then
-local t=y local p=PM:byte(vm)
+local pg=lpg()
+if y>=1 and y<=(pg and 7 or 4) and x>=1 and x<=STEPS then
+local t=pg and at or y local p=PM:byte(vm)
 if z==1 then
 if lft==nil then
 lft=t lfc=x

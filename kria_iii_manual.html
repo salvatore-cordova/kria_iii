@@ -350,7 +350,7 @@ window.addEventListener('DOMContentLoaded',function(){
   <li><span class="k">setting a loop:</span> first press = loop start, second press = loop end. loops can wrap around step 16 to step 3 for example.</li>
   <li><span class="k">every page has its own loop</span> for each track: trigger, note, octave, note length, ratchet and alt note. for example octave can loop 3 steps while notes loop 8. holding loop mod shows the loop of the page you are on. the velocity page uses the note loop and probability uses the trigger loop.</li>
   <li>how many parameters one loop edit changes depends on <span class="k">loop sync</span> (config page): none = only the parameter on the current page, track = every parameter of the edited track, all = every parameter on every track (default).</li>
-  <li>any track's loop can be edited, not just the active track.</li>
+  <li>on the trigger page, rows 1-4 are the four tracks, so any track's loop can be edited. on the other pages (note, octave, note length, ratchet, alt note, velocity) the page stays on screen and you set the loop of the selected track by pressing two steps in any row 1-7; steps outside the loop are dimmed.</li>
   <li><span class="k">mute:</span> while holding loop mod, press a track button to toggle mute.</li>
 </ul>
 </div>
@@ -368,6 +368,7 @@ window.addEventListener('DOMContentLoaded',function(){
 <ul class="fl">
   <li><span class="k">every page has its own clock division</span> for each track, so octave can run at a different speed than notes. holding time division mod shows and sets the division of the page you are on. the velocity page uses the note division and probability uses the trigger division.</li>
   <li>how many parameters one division edit changes depends on <span class="k">division sync</span> and <span class="k">note division sync</span> (config page). default = none, so each page keeps its own division.</li>
+  <li>while holding time division mod (or probability mod), press a track button to select that track.</li>
 </ul>
 </div>
 
