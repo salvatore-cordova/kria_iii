@@ -21,4 +21,11 @@ for t in sync playback persist; do
   lua5.4 harness.lua "$K" "$t.lua" | grep -E '^(ALL PASS|FAILS|FAIL )' | tr '\n' ' '
   echo
 done
+
+# 3. random key mashing must not raise a Lua error
+printf "fuzz: "; lua5.4 harness.lua "$K" fuzz.lua | grep -E '^(ALL PASS|FAILS|FAIL )' | tr '\n' ' '; echo
+# 4. desktop heap, v1.6.3 vs this script (no device heap model; see III_LUA_MEMORY_GUIDE.md)
+git -C "$ROOT" show b30ec0a:kria_iii.lua > "$T/base.lua"
+echo "mem v1.6.3: $(lua5.4 harness.lua "$T/base.lua" mem.lua | grep -v '^L ' | tr '\n' ' ')"
+echo "mem new:    $(lua5.4 harness.lua "$K" mem.lua | grep -v '^L ' | tr '\n' ' ')"
 rm -rf "$T"

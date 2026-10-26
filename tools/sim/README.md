@@ -10,3 +10,5 @@ Run everything: `tools/sim/run.sh` (needs `lua5.4`).
 - `playback.lua` - independent playheads per parameter, plus a random-edit stress run.
 - `persist.lua` - old-format pattern loading, flash round trip, loop snap.
 - `common.lua` - shared test helpers.
+- `fuzz.lua` - random key mashing, transport and MIDI clock (`N=`, `SEED=` env vars); any Lua error fails.
+- `mem.lua` - desktop heap figures in KB (after load, garbage made while playing / saving / loading), printed for v1.6.3 and the current script.
